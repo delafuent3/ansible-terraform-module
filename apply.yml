@@ -1,0 +1,25 @@
+---
+- name: Deploy Terraform Infra
+  hosts: localhost
+  vars:
+    # example_var: "This will be passed to terraform"
+    project_dir: "terraform-infra"
+
+  tasks:
+  - name: Terraform - Plan Apply
+    community.general.terraform:
+      project_path: 'terraform-infra/'
+      state: present
+      force_init: true
+      variables:
+        vpc-cidr: '10.20.0.0/16'
+        vpc-name: 'ansible-vpc'
+    tags:
+      - apply
+
+  - name: Terraform - Destroy
+    community.general.terraform:
+      project_path: 'terraform-infra/'
+      state: absent
+    tags:
+      - destroy
